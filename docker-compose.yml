@@ -11,7 +11,4 @@ services:
     environment:
       DATA_DIR: /app/data
     volumes:
-      - sub-merger-data:/app/data
-
-volumes:
-  sub-merger-data:
+      - ./data:/app/data

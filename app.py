@@ -25,8 +25,10 @@ UPSTREAM_USER_AGENT = "ClashMeta/1.19.0"
 
 
 def db():
-    connection = sqlite3.connect(DB_PATH)
+    connection = sqlite3.connect(DB_PATH, timeout=30)
     connection.row_factory = sqlite3.Row
+    connection.execute("PRAGMA journal_mode=WAL")
+    connection.execute("PRAGMA synchronous=FULL")
     return connection
 
 
