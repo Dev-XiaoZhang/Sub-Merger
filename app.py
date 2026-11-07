@@ -21,6 +21,7 @@ app = Flask(__name__)
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 app.secret_key = f"sub-merger:{ADMIN_PASSWORD}"
 MODE = os.getenv("SERVER_MODE", "admin")
+UPSTREAM_USER_AGENT = "ClashMeta/1.19.0"
 
 
 def db():
@@ -288,7 +289,7 @@ def add_source():
     except ValueError as error:
         return jsonify(error=str(error)), 400
     try:
-        response = requests.get(url, timeout=20, headers={"User-Agent": "Sub-Merger/1.0"})
+        response = requests.get(url, timeout=20, headers={"User-Agent": UPSTREAM_USER_AGENT})
         response.raise_for_status()
         proxies = parse_proxy_payload(response.text)
     except Exception as error:
@@ -315,7 +316,7 @@ def edit_source(source_id):
         return jsonify(error="请输入订阅链接"), 400
     try:
         safe_http_url(url)
-        response = requests.get(url, timeout=20, headers={"User-Agent": "Sub-Merger/1.0"})
+        response = requests.get(url, timeout=20, headers={"User-Agent": UPSTREAM_USER_AGENT})
         response.raise_for_status()
         proxies = parse_proxy_payload(response.text)
     except Exception as error:
@@ -352,7 +353,7 @@ def refresh_source(source_id):
     if not source:
         return jsonify(error="订阅不存在"), 404
     try:
-        response = requests.get(source["url"], timeout=20, headers={"User-Agent": "Sub-Merger/1.0"})
+        response = requests.get(source["url"], timeout=20, headers={"User-Agent": UPSTREAM_USER_AGENT})
         response.raise_for_status()
         proxies = parse_proxy_payload(response.text)
     except Exception as error:
